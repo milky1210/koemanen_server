@@ -9,5 +9,5 @@ def read_root():
 
 
 @app.get("/health")
-def read_root():
+def health_check():
     return {"status": "OK"}
