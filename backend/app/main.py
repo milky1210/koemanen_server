@@ -1,4 +1,5 @@
 # main.py
+import uvicorn
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -11,3 +12,6 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "OK"}
+
+if __name__ == "__main__":
+    uvicorn.run(app = "main:app", host="0.0.0.0", reload=True, port = 8000, log_level = "debug")
