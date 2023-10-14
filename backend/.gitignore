@@ -1,2 +1,3 @@
-__pycache/
-./mypy_cache
+*.log
+*.pyc
+app/__pycache__/
