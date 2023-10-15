@@ -40,9 +40,10 @@ def health_check():
 async def upload_files(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     path1 = save_file(file1)
     path2 = save_file(file2)
+    print(path1, path2)
     score = evaluate(path1,path2)
     print(score)
-    return {"filename1": file1.filename, "filename2": file2.filename}
+    return {"score": str(score)}
 
 if __name__ == "__main__":
     uvicorn.run(app = "main:app", host="0.0.0.0", reload=True, port = 8000, log_level = "debug")
