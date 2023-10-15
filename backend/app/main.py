@@ -4,6 +4,8 @@ from fastapi import FastAPI, File, UploadFile, Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
+from core.voice_process import save_file  # 作成した関数をインポート
+
 
 app = FastAPI()
 
@@ -37,6 +39,8 @@ def health_check():
 @app.post("/upload")
 async def upload_files(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     print(file1, file2)
+    path1 = save_file(file1)
+    path2 = save_file(file2)
     return {"filename1": file1.filename, "filename2": file2.filename}
 
 if __name__ == "__main__":
