@@ -1,3 +1,4 @@
 *.log
 *.pyc
 app/__pycache__/
+app/data/
