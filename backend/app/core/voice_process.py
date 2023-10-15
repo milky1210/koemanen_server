@@ -22,17 +22,16 @@ def apply_average_filter(y, filter_size=5):
     y_filtered = np.convolve(y, kernel, 'same')
     
     return y_filtered
-def compare(y1,y2,sr):
-    y1 = apply_average_filter(y1)
-    y2 = apply_average_filter(y2)
+def feature_compare(y1,y2,sr):
     mfcc1 = librosa.feature.mfcc(y=y1, sr=sr, n_mfcc=13)
     mfcc2 = librosa.feature.mfcc(y=y2, sr=sr, n_mfcc=13)
     distance, _ = fastdtw(mfcc1.T, mfcc2.T, dist=euclidean)
-    """
+    return distance
+
+def pitch_compare(y1,y2,sr):  # y1の平均の高さ-y2の平均の高さにしたい
     pitch1, mag1 = librosa.piptrack(y=y1, sr=sr)
     pitch2, mag2 = librosa.piptrack(y=y2, sr=sr)
     distance, _ = fastdtw(mag1.T, mag2.T, dist=euclidean)
-    """
     return distance
 
 
@@ -50,12 +49,23 @@ def plot_audio(y, path):
 
     plt.savefig(path)
 
+def preprocess(y):
+    y = apply_average_filter(y)
+    return y
 
 def evaluate(path1, path2):
     y1, sr1 = librosa.load(path1, sr=None)
     y2, sr2 = librosa.load(path2, sr=None)
+    plot_audio(y1, path="data/tmp1_raw.png")
+    plot_audio(y2, path="data/tmp2_raw.png")
+    y1 = preprocess(y1)
+    y2 = preprocess(y2)
+
     plot_audio(y1, path="data/tmp1.png")
     plot_audio(y2, path="data/tmp2.png")
-    score = compare(y1,y2,sr1)
+    score = feature_compare(y1,y2,sr1)
+    score_pitch = pitch_compare(y1,y2,sr1)
+    print("feature: ",score)
+    print("pitch: ",score_pitch)
     
     return score
